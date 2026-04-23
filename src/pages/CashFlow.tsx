@@ -8,6 +8,8 @@ import { ArrowDownToLine, ArrowUpFromLine, Wallet, TrendingUp } from "lucide-rea
 import { formatBRL, formatDateBR } from "@/lib/format";
 import { buildCashFlow, filterExpenses, filterIncomes } from "@/lib/finance-selectors";
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { ExportButton } from "@/components/finance/ExportButton";
+import { csvNumber, downloadCSV, timestampedFilename, toCSV } from "@/lib/export-csv";
 
 const tooltipStyle = {
   contentStyle: {
@@ -41,8 +43,29 @@ export default function CashFlow() {
   const totalInvested = filteredExpenses.filter((e) => e.type === "investimento" && e.status === "pago").reduce((s, e) => s + e.actualAmount, 0);
   const balance = totalIn - totalOut;
 
+  function handleExport() {
+    const headers = ["Data", "Tipo", "Descrição", "Categoria", "Pessoa", "Entrada (R$)", "Saída (R$)"];
+    const lineRows = rows.map((r) => [
+      formatDateBR(r.date),
+      r.type === "income" ? "Entrada" : "Saída",
+      r.description,
+      r.category,
+      r.person,
+      r.inflow > 0 ? csvNumber(r.inflow) : "",
+      r.outflow > 0 ? csvNumber(r.outflow) : "",
+    ]);
+    const totalRow = ["", "", "TOTAIS", "", "", csvNumber(totalIn), csvNumber(totalOut)];
+    const balanceRow = ["", "", "SALDO", "", "", "", csvNumber(balance)];
+    downloadCSV(timestampedFilename("fluxo-de-caixa"), toCSV(headers, [...lineRows, totalRow, balanceRow]));
+    return { rowCount: rows.length };
+  }
+
   return (
-    <AppLayout title="Fluxo de Caixa" description="Movimentação real consolidada (entradas e saídas confirmadas)">
+    <AppLayout
+      title="Fluxo de Caixa"
+      description="Movimentação real consolidada (entradas e saídas confirmadas)"
+      actions={<ExportButton onExport={handleExport} disabled={rows.length === 0} />}
+    >
       <div className="space-y-6">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
           <KpiCard label="Entradas" value={formatBRL(totalIn)} icon={ArrowDownToLine} tone="success" />

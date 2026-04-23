@@ -3,14 +3,27 @@ import { AppLayout } from "@/components/layout/AppLayout";
 import { useFinance } from "@/store/finance-store";
 import { generateInsights } from "@/lib/finance-selectors";
 import { AlertCircle, AlertTriangle, CheckCircle2, Info, Sparkles } from "lucide-react";
+import { ExportButton } from "@/components/finance/ExportButton";
+import { downloadCSV, timestampedFilename, toCSV } from "@/lib/export-csv";
 
 export default function Insights() {
   const incomes = useFinance((s) => s.incomes);
   const expenses = useFinance((s) => s.expenses);
   const insights = useMemo(() => generateInsights(incomes, expenses), [incomes, expenses]);
 
+  function handleExport() {
+    const headers = ["Nível", "Título", "Descrição"];
+    const rows = insights.map((i) => [i.level, i.title, i.description]);
+    downloadCSV(timestampedFilename("insights"), toCSV(headers, rows));
+    return { rowCount: insights.length };
+  }
+
   return (
-    <AppLayout title="Insights inteligentes" description="Análises automáticas e sugestões para melhorar suas finanças">
+    <AppLayout
+      title="Insights inteligentes"
+      description="Análises automáticas e sugestões para melhorar suas finanças"
+      actions={<ExportButton onExport={handleExport} disabled={insights.length === 0} />}
+    >
       <div className="space-y-4">
         <div className="rounded-xl border border-border bg-gradient-surface p-6">
           <div className="flex items-center gap-3 mb-2">

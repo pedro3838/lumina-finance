@@ -43,6 +43,8 @@ import { EXPENSE_TYPE_LABEL } from "@/lib/finance-types";
 import { Button } from "@/components/ui/button";
 import { IncomeFormDialog } from "@/components/finance/IncomeFormDialog";
 import { ExpenseFormDialog } from "@/components/finance/ExpenseFormDialog";
+import { ExportButton } from "@/components/finance/ExportButton";
+import { csvNumber, downloadCSV, timestampedFilename, toCSV } from "@/lib/export-csv";
 import { Plus } from "lucide-react";
 
 const PIE_COLORS = ["hsl(var(--chart-1))", "hsl(var(--chart-2))", "hsl(var(--chart-3))", "hsl(var(--chart-4))", "hsl(var(--chart-5))"];
@@ -81,12 +83,47 @@ export default function Dashboard() {
 
   const isEmpty = incomes.length === 0 && expenses.length === 0;
 
+  function handleExport() {
+    const headers = ["Indicador", "Valor (R$)"];
+    const rows: (string | number)[][] = [
+      ["Receita recebida", csvNumber(kpis.totalReceived)],
+      ["Receita pendente", csvNumber(kpis.totalPending)],
+      ["Receita prevista total", csvNumber(kpis.totalRevenue)],
+      ["Despesa real", csvNumber(kpis.totalExpenseActual)],
+      ["Despesa prevista", csvNumber(kpis.totalExpensePlanned)],
+      ["Investimento", csvNumber(kpis.totalInvested)],
+      ["% investido", csvNumber(kpis.investmentPct)],
+      ["Lucro líquido", csvNumber(kpis.netProfit)],
+      ["Saldo disponível", csvNumber(kpis.available)],
+      ["Poder real", csvNumber(kpis.realPower)],
+    ];
+    const sep: (string | number)[] = ["", ""];
+    const monthlyHeader = ["Mês", "Receitas (R$)", "Despesas (R$)", "Lucro (R$)"];
+    const monthlyRows = monthly.map((m) => [m.month, csvNumber(m.receitas), csvNumber(m.despesas), csvNumber(m.lucro)]);
+    const personRows = byPerson.map((p) => [p.person, csvNumber(p.value), "", ""]);
+    const typeRows = byType.map((t) => [EXPENSE_TYPE_LABEL[t.type as keyof typeof EXPENSE_TYPE_LABEL] ?? t.type, csvNumber(t.value), "", ""]);
+
+    const csv = [
+      toCSV(headers, rows),
+      "",
+      toCSV(monthlyHeader, monthlyRows),
+      "",
+      toCSV(["Receita por pessoa", "Valor (R$)"], personRows.map((r) => [r[0], r[1]])),
+      "",
+      toCSV(["Despesa por tipo", "Valor (R$)"], typeRows.map((r) => [r[0], r[1]])),
+    ].join("\r\n");
+
+    downloadCSV(timestampedFilename("dashboard"), csv);
+    return { rowCount: rows.length + monthlyRows.length };
+  }
+
   return (
     <AppLayout
       title="Dashboard"
       description="Visão geral das suas finanças"
       actions={
         <>
+          <ExportButton onExport={handleExport} disabled={isEmpty} />
           <IncomeFormDialog
             trigger={
               <Button variant="outline" size="sm">

@@ -5,6 +5,8 @@ import { FiltersBar, type FilterValue } from "@/components/finance/FiltersBar";
 import { ExpenseFormDialog } from "@/components/finance/ExpenseFormDialog";
 import { KpiCard } from "@/components/finance/KpiCard";
 import { StatusBadge } from "@/components/finance/StatusBadge";
+import { ExportButton } from "@/components/finance/ExportButton";
+import { csvNumber, downloadCSV, timestampedFilename, toCSV } from "@/lib/export-csv";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ArrowUpFromLine, AlertTriangle, CheckCircle2, Clock, Pencil, Trash2, Check, TrendingUp } from "lucide-react";
@@ -41,11 +43,35 @@ export default function Payables() {
     toast.success("Marcada como paga");
   }
 
+  function handleExport() {
+    const headers = ["Data", "Descrição", "Tipo", "Categoria", "Pagamento", "Classificação", "Pessoa", "Previsto (R$)", "Real (R$)", "Status"];
+    const rows = filtered.map((e) => [
+      formatDateBR(e.date),
+      e.description,
+      EXPENSE_TYPE_LABEL[e.type],
+      e.category,
+      PAYMENT_METHOD_LABEL[e.paymentMethod],
+      classifyExpense(e.type),
+      e.person,
+      csvNumber(e.plannedAmount),
+      csvNumber(e.actualAmount),
+      e.status,
+    ]);
+    const totalRow = ["", "TOTAIS", "", "", "", "", "", csvNumber(totalPlanned), csvNumber(totalActual), `Investido: ${csvNumber(totalInvest)}`];
+    downloadCSV(timestampedFilename("contas-a-pagar"), toCSV(headers, [...rows, totalRow]));
+    return { rowCount: filtered.length };
+  }
+
   return (
     <AppLayout
       title="Contas a Pagar"
       description="Despesas, investimentos e classificação ATIVO/PASSIVO"
-      actions={<ExpenseFormDialog />}
+      actions={
+        <>
+          <ExportButton onExport={handleExport} disabled={filtered.length === 0} />
+          <ExpenseFormDialog />
+        </>
+      }
     >
       <div className="space-y-6">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
