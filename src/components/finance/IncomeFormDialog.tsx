@@ -59,7 +59,7 @@ export function IncomeFormDialog({ initial, trigger, open, onOpenChange }: Incom
           </Button>
         </DialogTrigger>
       )}
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>{initial ? "Editar receita" : "Nova receita"}</DialogTitle>
         </DialogHeader>
