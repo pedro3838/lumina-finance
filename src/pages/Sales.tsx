@@ -4,6 +4,8 @@ import { useFinance } from "@/store/finance-store";
 import { SaleFormDialog } from "@/components/finance/SaleFormDialog";
 import { KpiCard } from "@/components/finance/KpiCard";
 import { StatusBadge } from "@/components/finance/StatusBadge";
+import { ExportButton } from "@/components/finance/ExportButton";
+import { csvNumber, downloadCSV, timestampedFilename, toCSV } from "@/lib/export-csv";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -33,8 +35,39 @@ export default function Sales() {
 
   const summary = useMemo(() => salesSummary(filtered), [filtered]);
 
+  function handleExport() {
+    const headers = [
+      "Data", "Cliente", "Cidade", "Produto", "Pessoa",
+      "Custo unit. (R$)", "Quantidade", "Margem %", "Markup",
+      "Preço unit. (R$)", "Valor total (R$)", "Custo total (R$)",
+      "Comissão %", "Comissão (R$)", "Lucro bruto (R$)", "Lucro líquido (R$)", "Status",
+    ];
+    const rows = filtered.map((s) => {
+      const c = calcSale(s);
+      return [
+        formatDateBR(s.date), s.client, s.city, s.product, s.person,
+        csvNumber(s.cost), s.quantity, csvNumber(s.marginPercent), csvNumber(c.markup),
+        csvNumber(c.unitPrice), csvNumber(c.totalValue), csvNumber(c.totalCost),
+        csvNumber(s.commissionPercent), csvNumber(c.commissionAmount),
+        csvNumber(c.grossProfit), csvNumber(c.netProfit), s.status,
+      ];
+    });
+    const totalRow = ["", "TOTAIS", "", "", "", "", "", "", "", "", csvNumber(summary.totalValue), csvNumber(summary.totalCost), "", csvNumber(summary.commission), csvNumber(summary.grossProfit), csvNumber(summary.netProfit), ""];
+    downloadCSV(timestampedFilename("vendas"), toCSV(headers, [...rows, totalRow]));
+    return { rowCount: filtered.length };
+  }
+
   return (
-    <AppLayout title="Vendas / Orçamentos" description="Gestão de propostas comerciais com cálculo automático de markup, margem e lucro" actions={<SaleFormDialog />}>
+    <AppLayout
+      title="Vendas / Orçamentos"
+      description="Gestão de propostas comerciais com cálculo automático de markup, margem e lucro"
+      actions={
+        <>
+          <ExportButton onExport={handleExport} disabled={filtered.length === 0} />
+          <SaleFormDialog />
+        </>
+      }
+    >
       <div className="space-y-6">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
           <KpiCard label="Volume total" value={formatBRL(summary.totalValue)} icon={DollarSign} tone="info" />
