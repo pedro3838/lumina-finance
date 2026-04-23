@@ -65,10 +65,10 @@ export default function Receivables() {
                 <TableRow className="hover:bg-transparent">
                   <TableHead>Data</TableHead>
                   <TableHead>Descrição</TableHead>
-                  <TableHead>Categoria</TableHead>
-                  <TableHead>Pessoa</TableHead>
+                  <TableHead className="hidden md:table-cell">Categoria</TableHead>
+                  <TableHead className="hidden sm:table-cell">Pessoa</TableHead>
                   <TableHead className="text-right">Valor</TableHead>
-                  <TableHead>Status</TableHead>
+                  <TableHead className="hidden sm:table-cell">Status</TableHead>
                   <TableHead className="text-right">Ações</TableHead>
                 </TableRow>
               </TableHeader>
@@ -85,16 +85,24 @@ export default function Receivables() {
                   return (
                     <TableRow key={i.id} className={isOverdue ? "bg-destructive/5" : ""}>
                       <TableCell className="whitespace-nowrap text-sm">{formatDateBR(i.date)}</TableCell>
-                      <TableCell className="font-medium text-sm">{i.description}</TableCell>
-                      <TableCell className="text-sm text-muted-foreground">{i.category}</TableCell>
-                      <TableCell className="text-sm">{i.person}</TableCell>
+                      <TableCell className="font-medium text-sm">
+                        <div>{i.description}</div>
+                        <div className="sm:hidden text-xs text-muted-foreground mt-0.5 flex items-center gap-2 flex-wrap">
+                          <span>{i.person}</span>
+                          <span>•</span>
+                          <StatusBadge status={i.status} />
+                          {isOverdue && <span className="text-destructive">Atrasada</span>}
+                        </div>
+                      </TableCell>
+                      <TableCell className="hidden md:table-cell text-sm text-muted-foreground">{i.category}</TableCell>
+                      <TableCell className="hidden sm:table-cell text-sm">{i.person}</TableCell>
                       <TableCell className="text-right font-semibold tabular-nums">{formatBRL(i.amount)}</TableCell>
-                      <TableCell>
+                      <TableCell className="hidden sm:table-cell">
                         <StatusBadge status={i.status} />
                         {isOverdue && <span className="ml-2 text-xs text-destructive">Atrasada</span>}
                       </TableCell>
                       <TableCell className="text-right">
-                        <div className="flex justify-end gap-1">
+                        <div className="flex justify-end gap-0.5 md:gap-1">
                           {i.status === "pendente" && (
                             <Button size="icon" variant="ghost" onClick={() => markReceived(i)} title="Marcar como recebida">
                               <Check className="h-4 w-4 text-success" />

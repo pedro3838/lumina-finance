@@ -64,13 +64,13 @@ export default function Payables() {
                 <TableRow className="hover:bg-transparent">
                   <TableHead>Data</TableHead>
                   <TableHead>Descrição</TableHead>
-                  <TableHead>Tipo</TableHead>
+                  <TableHead className="hidden sm:table-cell">Tipo</TableHead>
                   <TableHead className="hidden md:table-cell">Categoria</TableHead>
                   <TableHead className="hidden lg:table-cell">Pagamento</TableHead>
-                  <TableHead>Class.</TableHead>
-                  <TableHead className="text-right">Previsto</TableHead>
+                  <TableHead className="hidden sm:table-cell">Class.</TableHead>
+                  <TableHead className="text-right hidden md:table-cell">Previsto</TableHead>
                   <TableHead className="text-right">Real</TableHead>
-                  <TableHead>Status</TableHead>
+                  <TableHead className="hidden sm:table-cell">Status</TableHead>
                   <TableHead className="text-right">Ações</TableHead>
                 </TableRow>
               </TableHeader>
@@ -88,19 +88,26 @@ export default function Payables() {
                   return (
                     <TableRow key={e.id} className={overrunPct > 10 ? "bg-warning/5" : ""}>
                       <TableCell className="whitespace-nowrap text-sm">{formatDateBR(e.date)}</TableCell>
-                      <TableCell className="font-medium text-sm">{e.description}</TableCell>
-                      <TableCell><StatusBadge status={EXPENSE_TYPE_LABEL[e.type].toLowerCase()} /></TableCell>
+                      <TableCell className="font-medium text-sm">
+                        <div>{e.description}</div>
+                        <div className="sm:hidden text-xs text-muted-foreground mt-0.5 flex flex-wrap items-center gap-1.5">
+                          <StatusBadge status={EXPENSE_TYPE_LABEL[e.type].toLowerCase()} />
+                          <StatusBadge status={cls} />
+                          <StatusBadge status={e.status} />
+                        </div>
+                      </TableCell>
+                      <TableCell className="hidden sm:table-cell"><StatusBadge status={EXPENSE_TYPE_LABEL[e.type].toLowerCase()} /></TableCell>
                       <TableCell className="hidden md:table-cell text-sm text-muted-foreground">{e.category}</TableCell>
                       <TableCell className="hidden lg:table-cell text-sm text-muted-foreground">{PAYMENT_METHOD_LABEL[e.paymentMethod]}</TableCell>
-                      <TableCell><StatusBadge status={cls} /></TableCell>
-                      <TableCell className="text-right tabular-nums text-muted-foreground">{formatBRL(e.plannedAmount)}</TableCell>
+                      <TableCell className="hidden sm:table-cell"><StatusBadge status={cls} /></TableCell>
+                      <TableCell className="text-right tabular-nums text-muted-foreground hidden md:table-cell">{formatBRL(e.plannedAmount)}</TableCell>
                       <TableCell className="text-right tabular-nums font-semibold">
                         {formatBRL(e.actualAmount)}
                         {overrunPct > 10 && <div className="text-[10px] text-warning">+{overrunPct.toFixed(0)}%</div>}
                       </TableCell>
-                      <TableCell><StatusBadge status={e.status} /></TableCell>
+                      <TableCell className="hidden sm:table-cell"><StatusBadge status={e.status} /></TableCell>
                       <TableCell className="text-right">
-                        <div className="flex justify-end gap-1">
+                        <div className="flex justify-end gap-0.5 md:gap-1">
                           {e.status === "pendente" && (
                             <Button size="icon" variant="ghost" onClick={() => markPaid(e)} title="Marcar como paga">
                               <Check className="h-4 w-4 text-success" />

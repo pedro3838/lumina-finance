@@ -59,7 +59,7 @@ export function IncomeFormDialog({ initial, trigger, open, onOpenChange }: Incom
           </Button>
         </DialogTrigger>
       )}
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>{initial ? "Editar receita" : "Nova receita"}</DialogTitle>
         </DialogHeader>
@@ -120,9 +120,9 @@ export function IncomeFormDialog({ initial, trigger, open, onOpenChange }: Incom
               </SelectContent>
             </Select>
           </div>
-          <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancelar</Button>
-            <Button type="submit">{initial ? "Salvar" : "Adicionar"}</Button>
+          <DialogFooter className="flex-col-reverse gap-2 sm:flex-row sm:gap-0">
+            <Button type="button" variant="outline" onClick={() => setOpen(false)} className="w-full sm:w-auto">Cancelar</Button>
+            <Button type="submit" className="w-full sm:w-auto">{initial ? "Salvar" : "Adicionar"}</Button>
           </DialogFooter>
         </form>
       </DialogContent>

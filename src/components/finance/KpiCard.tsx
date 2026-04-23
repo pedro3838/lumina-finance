@@ -32,15 +32,15 @@ const toneIconBg: Record<NonNullable<KpiCardProps["tone"]>, string> = {
 export function KpiCard({ label, value, icon: Icon, hint, trend, tone = "default", className, children }: KpiCardProps) {
   return (
     <div className={cn("kpi-card", className)}>
-      <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          <p className="text-xs uppercase tracking-wider text-muted-foreground font-medium">{label}</p>
-          <p className={cn("mt-2 text-2xl font-semibold tabular-nums truncate", toneStyles[tone])}>{value}</p>
-          {hint && <p className="mt-1 text-xs text-muted-foreground truncate">{hint}</p>}
+      <div className="flex items-start justify-between gap-2 md:gap-3">
+        <div className="min-w-0 flex-1">
+          <p className="text-[10px] md:text-xs uppercase tracking-wider text-muted-foreground font-medium truncate">{label}</p>
+          <p className={cn("mt-1.5 md:mt-2 text-lg md:text-2xl font-semibold tabular-nums truncate", toneStyles[tone])}>{value}</p>
+          {hint && <p className="mt-1 text-[10px] md:text-xs text-muted-foreground truncate">{hint}</p>}
         </div>
         {Icon && (
-          <div className={cn("h-10 w-10 shrink-0 rounded-lg grid place-items-center", toneIconBg[tone])}>
-            <Icon className="h-5 w-5" />
+          <div className={cn("h-8 w-8 md:h-10 md:w-10 shrink-0 rounded-lg grid place-items-center", toneIconBg[tone])}>
+            <Icon className="h-4 w-4 md:h-5 md:w-5" />
           </div>
         )}
       </div>
