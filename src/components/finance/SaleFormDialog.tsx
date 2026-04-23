@@ -131,9 +131,9 @@ export function SaleFormDialog({ initial, trigger, open, onOpenChange }: SaleFor
             </Select>
           </div>
 
-          <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancelar</Button>
-            <Button type="submit">{initial ? "Salvar" : "Adicionar"}</Button>
+          <DialogFooter className="flex-col-reverse gap-2 sm:flex-row sm:gap-0">
+            <Button type="button" variant="outline" onClick={() => setOpen(false)} className="w-full sm:w-auto">Cancelar</Button>
+            <Button type="submit" className="w-full sm:w-auto">{initial ? "Salvar" : "Adicionar"}</Button>
           </DialogFooter>
         </form>
       </DialogContent>
