@@ -89,7 +89,7 @@ export default function Payables() {
                     <TableRow key={e.id} className={overrunPct > 10 ? "bg-warning/5" : ""}>
                       <TableCell className="whitespace-nowrap text-sm">{formatDateBR(e.date)}</TableCell>
                       <TableCell className="font-medium text-sm">{e.description}</TableCell>
-                      <TableCell><StatusBadge status={e.type} className="capitalize">{EXPENSE_TYPE_LABEL[e.type]}</StatusBadge></TableCell>
+                      <TableCell><StatusBadge status={EXPENSE_TYPE_LABEL[e.type].toLowerCase()} /></TableCell>
                       <TableCell className="hidden md:table-cell text-sm text-muted-foreground">{e.category}</TableCell>
                       <TableCell className="hidden lg:table-cell text-sm text-muted-foreground">{PAYMENT_METHOD_LABEL[e.paymentMethod]}</TableCell>
                       <TableCell><StatusBadge status={cls} /></TableCell>
