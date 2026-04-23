@@ -53,15 +53,15 @@ export default function Sales() {
             <Table>
               <TableHeader>
                 <TableRow className="hover:bg-transparent">
-                  <TableHead>Data</TableHead>
+                  <TableHead className="hidden sm:table-cell">Data</TableHead>
                   <TableHead>Cliente</TableHead>
                   <TableHead className="hidden md:table-cell">Produto</TableHead>
                   <TableHead className="hidden lg:table-cell">Cidade</TableHead>
-                  <TableHead className="text-right">Qtd</TableHead>
+                  <TableHead className="text-right hidden sm:table-cell">Qtd</TableHead>
                   <TableHead className="text-right hidden md:table-cell">Markup</TableHead>
                   <TableHead className="text-right">Total</TableHead>
-                  <TableHead className="text-right">Lucro líq.</TableHead>
-                  <TableHead>Status</TableHead>
+                  <TableHead className="text-right hidden sm:table-cell">Lucro líq.</TableHead>
+                  <TableHead className="hidden sm:table-cell">Status</TableHead>
                   <TableHead className="text-right">Ações</TableHead>
                 </TableRow>
               </TableHeader>
@@ -77,17 +77,28 @@ export default function Sales() {
                   const c = calcSale(s);
                   return (
                     <TableRow key={s.id}>
-                      <TableCell className="whitespace-nowrap text-sm">{formatDateBR(s.date)}</TableCell>
-                      <TableCell className="font-medium text-sm">{s.client}</TableCell>
+                      <TableCell className="whitespace-nowrap text-sm hidden sm:table-cell">{formatDateBR(s.date)}</TableCell>
+                      <TableCell className="font-medium text-sm">
+                        <div>{s.client}</div>
+                        <div className="sm:hidden text-xs text-muted-foreground mt-0.5 flex items-center gap-1.5 flex-wrap">
+                          <span>{formatDateBR(s.date)}</span>
+                          <span>•</span>
+                          <span>{s.product}</span>
+                          <StatusBadge status={s.status} />
+                        </div>
+                      </TableCell>
                       <TableCell className="hidden md:table-cell text-sm text-muted-foreground">{s.product}</TableCell>
                       <TableCell className="hidden lg:table-cell text-sm text-muted-foreground">{s.city || "—"}</TableCell>
-                      <TableCell className="text-right tabular-nums text-sm">{s.quantity}</TableCell>
+                      <TableCell className="text-right tabular-nums text-sm hidden sm:table-cell">{s.quantity}</TableCell>
                       <TableCell className="text-right tabular-nums hidden md:table-cell text-sm">{c.markup.toFixed(2)}x</TableCell>
-                      <TableCell className="text-right tabular-nums font-semibold">{formatBRL(c.totalValue)}</TableCell>
-                      <TableCell className="text-right tabular-nums text-success">{formatBRL(c.netProfit)}</TableCell>
-                      <TableCell><StatusBadge status={s.status} /></TableCell>
+                      <TableCell className="text-right tabular-nums font-semibold">
+                        {formatBRL(c.totalValue)}
+                        <div className="sm:hidden text-xs text-success font-normal">{formatBRL(c.netProfit)}</div>
+                      </TableCell>
+                      <TableCell className="text-right tabular-nums text-success hidden sm:table-cell">{formatBRL(c.netProfit)}</TableCell>
+                      <TableCell className="hidden sm:table-cell"><StatusBadge status={s.status} /></TableCell>
                       <TableCell className="text-right">
-                        <div className="flex justify-end gap-1">
+                        <div className="flex justify-end gap-0.5 md:gap-1">
                           <Button size="icon" variant="ghost" onClick={() => setEditing(s)}>
                             <Pencil className="h-4 w-4" />
                           </Button>

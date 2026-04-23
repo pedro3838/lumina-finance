@@ -88,8 +88,8 @@ export default function CashFlow() {
                 <TableRow className="hover:bg-transparent">
                   <TableHead>Data</TableHead>
                   <TableHead>Descrição</TableHead>
-                  <TableHead>Categoria</TableHead>
-                  <TableHead>Pessoa</TableHead>
+                  <TableHead className="hidden md:table-cell">Categoria</TableHead>
+                  <TableHead className="hidden sm:table-cell">Pessoa</TableHead>
                   <TableHead className="text-right">Entrada</TableHead>
                   <TableHead className="text-right">Saída</TableHead>
                 </TableRow>
@@ -105,9 +105,12 @@ export default function CashFlow() {
                 {rows.map((r, idx) => (
                   <TableRow key={idx}>
                     <TableCell className="whitespace-nowrap text-sm">{formatDateBR(r.date)}</TableCell>
-                    <TableCell className="text-sm font-medium">{r.description}</TableCell>
-                    <TableCell className="text-sm text-muted-foreground">{r.category}</TableCell>
-                    <TableCell className="text-sm">{r.person}</TableCell>
+                    <TableCell className="text-sm font-medium">
+                      <div>{r.description}</div>
+                      <div className="sm:hidden text-xs text-muted-foreground mt-0.5">{r.category} • {r.person}</div>
+                    </TableCell>
+                    <TableCell className="hidden md:table-cell text-sm text-muted-foreground">{r.category}</TableCell>
+                    <TableCell className="hidden sm:table-cell text-sm">{r.person}</TableCell>
                     <TableCell className="text-right tabular-nums text-success">
                       {r.inflow > 0 ? formatBRL(r.inflow) : "—"}
                     </TableCell>
