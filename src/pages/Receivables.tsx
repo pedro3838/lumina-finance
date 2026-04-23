@@ -5,6 +5,8 @@ import { FiltersBar, type FilterValue } from "@/components/finance/FiltersBar";
 import { IncomeFormDialog } from "@/components/finance/IncomeFormDialog";
 import { KpiCard } from "@/components/finance/KpiCard";
 import { StatusBadge } from "@/components/finance/StatusBadge";
+import { ExportButton } from "@/components/finance/ExportButton";
+import { csvNumber, downloadCSV, timestampedFilename, toCSV } from "@/lib/export-csv";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ArrowDownToLine, AlertTriangle, CheckCircle2, Clock, Pencil, Trash2, Check } from "lucide-react";
@@ -42,11 +44,31 @@ export default function Receivables() {
     toast.success("Marcada como recebida");
   }
 
+  function handleExport() {
+    const headers = ["Data", "Descrição", "Categoria", "Pessoa", "Valor (R$)", "Status"];
+    const rows = filtered.map((i) => [
+      formatDateBR(i.date),
+      i.description,
+      i.category,
+      i.person,
+      csvNumber(i.amount),
+      i.status,
+    ]);
+    const totalRow = ["", "TOTAIS", "", "", csvNumber(total), `Recebido: ${csvNumber(totalReceived)} | Pendente: ${csvNumber(totalPending)}`];
+    downloadCSV(timestampedFilename("contas-a-receber"), toCSV(headers, [...rows, totalRow]));
+    return { rowCount: filtered.length };
+  }
+
   return (
     <AppLayout
       title="Contas a Receber"
       description="Gestão de receitas previstas e recebidas"
-      actions={<IncomeFormDialog />}
+      actions={
+        <>
+          <ExportButton onExport={handleExport} disabled={filtered.length === 0} />
+          <IncomeFormDialog />
+        </>
+      }
     >
       <div className="space-y-6">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
