@@ -59,8 +59,8 @@ export default function CashFlow() {
           {daily.length === 0 ? (
             <div className="h-[260px] grid place-items-center text-sm text-muted-foreground">Sem movimentação no período</div>
           ) : (
-            <ResponsiveContainer width="100%" height={260}>
-              <AreaChart data={daily} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
+            <ResponsiveContainer width="100%" height={220} minWidth={0}>
+              <AreaChart data={daily} margin={{ top: 10, right: 6, left: -18, bottom: 0 }}>
                 <defs>
                   <linearGradient id="acc" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity={0.5} />
@@ -68,8 +68,8 @@ export default function CashFlow() {
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
-                <XAxis dataKey="date" stroke="hsl(var(--muted-foreground))" fontSize={11} tickFormatter={(d) => d.slice(8)} />
-                <YAxis stroke="hsl(var(--muted-foreground))" fontSize={11} tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`} />
+                <XAxis dataKey="date" stroke="hsl(var(--muted-foreground))" fontSize={10} tickFormatter={(d) => d.slice(8)} />
+                <YAxis stroke="hsl(var(--muted-foreground))" fontSize={10} tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`} width={36} />
                 <Tooltip {...tooltipStyle} formatter={(v: number) => formatBRL(v)} labelFormatter={formatDateBR} />
                 <Area type="monotone" dataKey="acumulado" stroke="hsl(var(--primary))" fill="url(#acc)" strokeWidth={2} />
               </AreaChart>

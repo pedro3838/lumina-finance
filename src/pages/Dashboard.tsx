@@ -137,8 +137,8 @@ export default function Dashboard() {
             {monthly.length === 0 ? (
               <EmptyChart />
             ) : (
-              <ResponsiveContainer width="100%" height={280}>
-                <AreaChart data={monthly} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
+              <ResponsiveContainer width="100%" height={240} minWidth={0}>
+                <AreaChart data={monthly} margin={{ top: 10, right: 6, left: -18, bottom: 0 }}>
                   <defs>
                     <linearGradient id="g-rec" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="0%" stopColor="hsl(var(--chart-1))" stopOpacity={0.5} />
@@ -150,10 +150,10 @@ export default function Dashboard() {
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
-                  <XAxis dataKey="month" tickFormatter={monthLabel} stroke="hsl(var(--muted-foreground))" fontSize={11} />
-                  <YAxis stroke="hsl(var(--muted-foreground))" fontSize={11} tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`} />
+                  <XAxis dataKey="month" tickFormatter={monthLabel} stroke="hsl(var(--muted-foreground))" fontSize={10} />
+                  <YAxis stroke="hsl(var(--muted-foreground))" fontSize={10} tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`} width={36} />
                   <Tooltip {...tooltipStyle} formatter={(v: number) => formatBRL(v)} labelFormatter={(l) => monthLabel(l as string)} />
-                  <Legend wrapperStyle={{ fontSize: 12 }} />
+                  <Legend wrapperStyle={{ fontSize: 11 }} />
                   <Area type="monotone" dataKey="receitas" name="Receitas" stroke="hsl(var(--chart-1))" fill="url(#g-rec)" strokeWidth={2} />
                   <Area type="monotone" dataKey="despesas" name="Despesas" stroke="hsl(var(--chart-5))" fill="url(#g-desp)" strokeWidth={2} />
                 </AreaChart>
@@ -165,11 +165,11 @@ export default function Dashboard() {
             {byPerson.length === 0 ? (
               <EmptyChart />
             ) : (
-              <ResponsiveContainer width="100%" height={280}>
-                <BarChart data={byPerson} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
+              <ResponsiveContainer width="100%" height={240} minWidth={0}>
+                <BarChart data={byPerson} margin={{ top: 10, right: 6, left: -18, bottom: 0 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
-                  <XAxis dataKey="person" stroke="hsl(var(--muted-foreground))" fontSize={11} />
-                  <YAxis stroke="hsl(var(--muted-foreground))" fontSize={11} tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`} />
+                  <XAxis dataKey="person" stroke="hsl(var(--muted-foreground))" fontSize={10} />
+                  <YAxis stroke="hsl(var(--muted-foreground))" fontSize={10} tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`} width={36} />
                   <Tooltip {...tooltipStyle} formatter={(v: number) => formatBRL(v)} />
                   <Bar dataKey="value" name="Recebido" radius={[6, 6, 0, 0]}>
                     {byPerson.map((_, i) => (
@@ -185,11 +185,11 @@ export default function Dashboard() {
             {monthly.length === 0 ? (
               <EmptyChart />
             ) : (
-              <ResponsiveContainer width="100%" height={260}>
-                <LineChart data={monthly} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
+              <ResponsiveContainer width="100%" height={220} minWidth={0}>
+                <LineChart data={monthly} margin={{ top: 10, right: 6, left: -18, bottom: 0 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
-                  <XAxis dataKey="month" tickFormatter={monthLabel} stroke="hsl(var(--muted-foreground))" fontSize={11} />
-                  <YAxis stroke="hsl(var(--muted-foreground))" fontSize={11} tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`} />
+                  <XAxis dataKey="month" tickFormatter={monthLabel} stroke="hsl(var(--muted-foreground))" fontSize={10} />
+                  <YAxis stroke="hsl(var(--muted-foreground))" fontSize={10} tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`} width={36} />
                   <Tooltip {...tooltipStyle} formatter={(v: number) => formatBRL(v)} labelFormatter={(l) => monthLabel(l as string)} />
                   <Line type="monotone" dataKey="lucro" stroke="hsl(var(--primary))" strokeWidth={2.5} dot={{ r: 3 }} activeDot={{ r: 5 }} />
                 </LineChart>
@@ -201,9 +201,9 @@ export default function Dashboard() {
             {byType.length === 0 ? (
               <EmptyChart />
             ) : (
-              <ResponsiveContainer width="100%" height={260}>
+              <ResponsiveContainer width="100%" height={240} minWidth={0}>
                 <PieChart>
-                  <Pie data={byType} dataKey="value" nameKey="type" innerRadius={50} outerRadius={90} paddingAngle={2}>
+                  <Pie data={byType} dataKey="value" nameKey="type" innerRadius={42} outerRadius={75} paddingAngle={2}>
                     {byType.map((_, i) => (
                       <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} stroke="hsl(var(--card))" />
                     ))}
@@ -213,7 +213,7 @@ export default function Dashboard() {
                     formatter={(v: number, n) => [formatBRL(v), EXPENSE_TYPE_LABEL[n as keyof typeof EXPENSE_TYPE_LABEL] ?? n]}
                   />
                   <Legend
-                    wrapperStyle={{ fontSize: 11 }}
+                    wrapperStyle={{ fontSize: 10 }}
                     formatter={(v) => EXPENSE_TYPE_LABEL[v as keyof typeof EXPENSE_TYPE_LABEL] ?? v}
                   />
                 </PieChart>
