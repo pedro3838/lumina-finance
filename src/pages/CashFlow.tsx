@@ -45,19 +45,15 @@ export default function CashFlow() {
 
   function handleExport() {
     const headers = ["Data", "Tipo", "Descrição", "Categoria", "Pessoa", "Entrada (R$)", "Saída (R$)"];
-    const rows = rows.length === 0 ? [] : rows;
-    const lineRows = (() => {
-      let acc = 0;
-      return rows.map((r) => [
-        formatDateBR(r.date),
-        r.type === "income" ? "Entrada" : "Saída",
-        r.description,
-        r.category,
-        r.person,
-        r.inflow > 0 ? csvNumber(r.inflow) : "",
-        r.outflow > 0 ? csvNumber(r.outflow) : "",
-      ]);
-    })();
+    const lineRows = rows.map((r) => [
+      formatDateBR(r.date),
+      r.type === "income" ? "Entrada" : "Saída",
+      r.description,
+      r.category,
+      r.person,
+      r.inflow > 0 ? csvNumber(r.inflow) : "",
+      r.outflow > 0 ? csvNumber(r.outflow) : "",
+    ]);
     const totalRow = ["", "", "TOTAIS", "", "", csvNumber(totalIn), csvNumber(totalOut)];
     const balanceRow = ["", "", "SALDO", "", "", "", csvNumber(balance)];
     downloadCSV(timestampedFilename("fluxo-de-caixa"), toCSV(headers, [...lineRows, totalRow, balanceRow]));
