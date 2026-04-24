@@ -14,7 +14,107 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      bank_accounts: {
+        Row: {
+          balance: number
+          color: string
+          created_at: string
+          id: string
+          name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          balance?: number
+          color?: string
+          created_at?: string
+          id?: string
+          name: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          balance?: number
+          color?: string
+          created_at?: string
+          id?: string
+          name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      partners: {
+        Row: {
+          color: string
+          created_at: string
+          id: string
+          name: string
+          percentage: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          color?: string
+          created_at?: string
+          id?: string
+          name: string
+          percentage?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          color?: string
+          created_at?: string
+          id?: string
+          name?: string
+          percentage?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profit_distributions: {
+        Row: {
+          amount: number
+          created_at: string
+          distribution_date: string
+          id: string
+          notes: string | null
+          partner_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          distribution_date?: string
+          id?: string
+          notes?: string | null
+          partner_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          distribution_date?: string
+          id?: string
+          notes?: string | null
+          partner_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profit_distributions_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "partners"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
