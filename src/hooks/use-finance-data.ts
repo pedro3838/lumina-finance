@@ -1,6 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase as typedSupabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
+
+// Tipos das novas tabelas ainda não regenerados — usamos cliente untyped
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const supabase = typedSupabase as any;
 
 // ============ Types ============
 export interface BankAccount {
