@@ -2,7 +2,10 @@ import { useMemo, useState } from "react";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { KpiCard } from "@/components/finance/KpiCard";
 import { FiltersBar, type FilterValue } from "@/components/finance/FiltersBar";
+import { BanksSection } from "@/components/finance/BanksSection";
+import { PartnersSection } from "@/components/finance/PartnersSection";
 import { useFinance } from "@/store/finance-store";
+import { useBankAccounts, usePartners } from "@/hooks/use-finance-data";
 import {
   ArrowDownToLine,
   ArrowUpFromLine,
@@ -11,6 +14,8 @@ import {
   TrendingUp,
   PercentSquare,
   AlertCircle,
+  Landmark,
+  Users,
 } from "lucide-react";
 import { formatBRL, formatPct, monthLabel } from "@/lib/format";
 import {
@@ -64,6 +69,8 @@ const tooltipStyle = {
 export default function Dashboard() {
   const incomes = useFinance((s) => s.incomes);
   const expenses = useFinance((s) => s.expenses);
+  const { data: banks = [] } = useBankAccounts();
+  const { data: partners = [] } = usePartners();
   const [filter, setFilter] = useState<FilterValue>({ month: "all", person: "Todos", category: "Todas" });
 
   const filteredIncomes = useMemo(
@@ -80,6 +87,10 @@ export default function Dashboard() {
   const byPerson = useMemo(() => revenueByPerson(filteredIncomes), [filteredIncomes]);
   const byType = useMemo(() => expenseByType(filteredExpenses), [filteredExpenses]);
   const insights = useMemo(() => generateInsights(filteredIncomes, filteredExpenses), [filteredIncomes, filteredExpenses]);
+
+  const workingCapital = useMemo(() => banks.reduce((s, b) => s + Number(b.balance), 0), [banks]);
+  const totalAllocatedPct = useMemo(() => partners.reduce((s, p) => s + Number(p.percentage), 0), [partners]);
+  const expectedDistribution = Math.max(0, kpis.netProfit) * (totalAllocatedPct / 100);
 
   const isEmpty = incomes.length === 0 && expenses.length === 0;
 
