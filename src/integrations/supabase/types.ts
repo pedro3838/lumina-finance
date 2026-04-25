@@ -14,7 +14,144 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      expenses: {
+        Row: {
+          actual_amount: number
+          category: string
+          created_at: string
+          date: string
+          description: string
+          id: string
+          payment_method: string
+          person: string
+          planned_amount: number
+          status: string
+          type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          actual_amount?: number
+          category: string
+          created_at?: string
+          date: string
+          description: string
+          id?: string
+          payment_method: string
+          person: string
+          planned_amount?: number
+          status?: string
+          type: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          actual_amount?: number
+          category?: string
+          created_at?: string
+          date?: string
+          description?: string
+          id?: string
+          payment_method?: string
+          person?: string
+          planned_amount?: number
+          status?: string
+          type?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      incomes: {
+        Row: {
+          amount: number
+          category: string
+          created_at: string
+          date: string
+          description: string
+          id: string
+          person: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount?: number
+          category: string
+          created_at?: string
+          date: string
+          description: string
+          id?: string
+          person: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          category?: string
+          created_at?: string
+          date?: string
+          description?: string
+          id?: string
+          person?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      sales: {
+        Row: {
+          city: string
+          client: string
+          commission_percent: number
+          cost: number
+          created_at: string
+          date: string
+          id: string
+          margin_percent: number
+          person: string
+          product: string
+          quantity: number
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          city?: string
+          client: string
+          commission_percent?: number
+          cost?: number
+          created_at?: string
+          date: string
+          id?: string
+          margin_percent?: number
+          person: string
+          product: string
+          quantity?: number
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          city?: string
+          client?: string
+          commission_percent?: number
+          cost?: number
+          created_at?: string
+          date?: string
+          id?: string
+          margin_percent?: number
+          person?: string
+          product?: string
+          quantity?: number
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
