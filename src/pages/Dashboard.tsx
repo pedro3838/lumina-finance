@@ -81,9 +81,6 @@ export default function Dashboard() {
   const byType = useMemo(() => expenseByType(filteredExpenses), [filteredExpenses]);
   const insights = useMemo(() => generateInsights(filteredIncomes, filteredExpenses), [filteredIncomes, filteredExpenses]);
 
-  const workingCapital = useMemo(() => banks.reduce((s, b) => s + Number(b.balance), 0), [banks]);
-  const totalAllocatedPct = useMemo(() => partners.reduce((s, p) => s + Number(p.percentage), 0), [partners]);
-  const expectedDistribution = Math.max(0, kpis.netProfit) * (totalAllocatedPct / 100);
 
   const isEmpty = incomes.length === 0 && expenses.length === 0;
 
