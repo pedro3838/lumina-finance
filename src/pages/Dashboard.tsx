@@ -64,8 +64,6 @@ const tooltipStyle = {
 export default function Dashboard() {
   const incomes = useFinance((s) => s.incomes);
   const expenses = useFinance((s) => s.expenses);
-  const { data: banks = [] } = useBankAccounts();
-  const { data: partners = [] } = usePartners();
   const [filter, setFilter] = useState<FilterValue>({ month: "all", person: "Todos", category: "Todas" });
 
   const filteredIncomes = useMemo(
