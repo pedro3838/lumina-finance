@@ -162,17 +162,9 @@ export default function Dashboard() {
           <KpiCard label="Receita total" value={formatBRL(kpis.totalReceived)} icon={ArrowDownToLine} tone="success" hint={`Pendente: ${formatBRL(kpis.totalPending)}`} />
           <KpiCard label="Despesa total" value={formatBRL(kpis.totalExpenseActual)} icon={ArrowUpFromLine} tone="danger" hint={`Previsto: ${formatBRL(kpis.totalExpensePlanned)}`} />
           <KpiCard label="Lucro líquido" value={formatBRL(kpis.netProfit)} icon={TrendingUp} tone={kpis.netProfit >= 0 ? "success" : "danger"} hint="Receita - Despesa" />
-          <KpiCard label="Distribuição prevista" value={formatBRL(expectedDistribution)} icon={Users} tone="info" hint={`${totalAllocatedPct.toFixed(0)}% alocado`} />
-          <KpiCard label="Capital de giro" value={formatBRL(workingCapital)} icon={Landmark} tone="success" hint={`${banks.length} conta(s)`} />
           <KpiCard label="Investimento" value={formatPct(kpis.investmentPct)} icon={PiggyBank} tone="info" hint={formatBRL(kpis.totalInvested)} />
           <KpiCard label="Saldo disponível" value={formatBRL(kpis.available)} icon={Wallet} tone={kpis.available >= 0 ? "success" : "danger"} />
           <KpiCard label="Poder real" value={formatBRL(kpis.realPower)} icon={PercentSquare} tone="default" hint="Saldo + Investido" />
-        </div>
-
-        {/* Bancos e Sócios */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <BanksSection />
-          <PartnersSection netProfit={kpis.netProfit} />
         </div>
 
         {/* Insights count */}
