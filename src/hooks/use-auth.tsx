@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 import type { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
+import { useFinance } from "@/store/finance-store";
 
 interface AuthContextValue {
   user: User | null;
@@ -17,10 +18,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let lastUserId: string | null = null;
+
+    const syncFinance = (uid: string | null) => {
+      if (uid && uid !== lastUserId) {
+        lastUserId = uid;
+        // Carrega dados do Supabase para esse usuário
+        useFinance.getState().loadAll(uid);
+      } else if (!uid && lastUserId) {
+        lastUserId = null;
+        useFinance.getState().reset();
+      }
+    };
+
     // 1) Listener PRIMEIRO (evita race condition)
     const { data: subscription } = supabase.auth.onAuthStateChange((_event, newSession) => {
       setSession(newSession);
       setUser(newSession?.user ?? null);
+      // Defer chamada async pra não bloquear listener
+      setTimeout(() => syncFinance(newSession?.user?.id ?? null), 0);
     });
 
     // 2) Depois consulta sessão atual
@@ -28,6 +44,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setSession(existing);
       setUser(existing?.user ?? null);
       setLoading(false);
+      setTimeout(() => syncFinance(existing?.user?.id ?? null), 0);
     });
 
     return () => {
@@ -37,6 +54,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signOut = async () => {
     await supabase.auth.signOut();
+    useFinance.getState().reset();
   };
 
   return (
