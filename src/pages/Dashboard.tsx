@@ -2,10 +2,7 @@ import { useMemo, useState } from "react";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { KpiCard } from "@/components/finance/KpiCard";
 import { FiltersBar, type FilterValue } from "@/components/finance/FiltersBar";
-import { BanksSection } from "@/components/finance/BanksSection";
-import { PartnersSection } from "@/components/finance/PartnersSection";
 import { useFinance } from "@/store/finance-store";
-import { useBankAccounts, usePartners } from "@/hooks/use-finance-data";
 import {
   ArrowDownToLine,
   ArrowUpFromLine,
@@ -14,8 +11,6 @@ import {
   TrendingUp,
   PercentSquare,
   AlertCircle,
-  Landmark,
-  Users,
 } from "lucide-react";
 import { formatBRL, formatPct, monthLabel } from "@/lib/format";
 import {
